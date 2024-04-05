@@ -9,8 +9,8 @@ import SwiftUI
 
 /// An Object that contains the Text view and the index it is represented by
 /// Conforms to Identifiable, you can define your own ID if necessary.
-struct TabItem: Identifiable {
-    let id: UUID = UUID()
-    let view: Text
-    let index: Int
+public struct TabItem: Identifiable {
+    public let id: UUID = UUID()
+    public let view: Text
+    public let index: Int
 }

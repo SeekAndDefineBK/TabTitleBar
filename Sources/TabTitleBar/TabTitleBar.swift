@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct TabTitleBar: View {
+public struct TabTitleBar: View {
     @Binding var currentTabSelection: Int
     let tabItems: [TabItem]
     
@@ -9,12 +9,12 @@ struct TabTitleBar: View {
     /// - Parameters:
     ///   - currentTabSelection: Binding<Int> that will determine which item is active / inactive
     ///   - tabItems: An Array of TabItems, an Object that
-    init(currentTabSelection: Binding<Int>, tabItems: [TabItem]) {
+    public init(currentTabSelection: Binding<Int>, tabItems: [TabItem]) {
         _currentTabSelection = currentTabSelection
         self.tabItems = tabItems
     }
     
-    var body: some View {
+    public var body: some View {
         HStack {
             ForEach(tabItems) { item in
                 item.view
