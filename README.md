@@ -1,11 +1,18 @@
 # SwiftUI Tab Title Bar
-A SwiftUI view that contains an HStack of Text views and animates those views to large or small based on if their respective tab is active. 
+A SwiftUI view which will prominently display the currently selected tab title and present the user an option to change to another tab.
 
 This is a component that is initialized with a current index value and an array of Tab Items. Tab Items are a struct that contains a view and a target index. 
 
-Tab Item conforms to identifiable with a UUID predefined, however you can assign your own UUID should you so choose. 
+TabItem conforms to identifiable with a UUID predefined, however you can assign your own UUID should you so choose. 
 
-This is a component that was pulled out of my app Resolute to be shared as an open source package. Version 1.0 focuses on being a component built specifically for Resolute, however as time goes on I look forward to making it much more flexible. 
+This is a component that was pulled out of my app Resolute to be shared as an open source package. 
+
+# New in Version 1.1
+- The user can tap on the inactive tabs and that tab will be selected.
+- If the developer has more tabs than can fit in a horizontally constrained space, the view will collapse into a menu button which will display the currently selected title and on tap will open a menu picker to change the tab.
+
+# New Issues
+- I created an ItemWithModifier view with the intention to use it in the Menu style picker. But it appears the target index value never matches the currently selected tab. This is likely an easy fix, but at this time I'm going around in circles trying to fix it. When this is fixed, SingleTabTitleModifier can be deprecated.  
 
 # Demo
 <p align="center">
@@ -13,7 +20,7 @@ This is a component that was pulled out of my app Resolute to be shared as an op
 </p>
 
 # Scope
-- Ultimately, this is a list of items in an HStack.
+- Ultimately, this is a list of items in either an HStack or a Menu.
 - The currentTabSelection a `Binding<Int>`
 - TabItem contains the following.
     - An index, this is used to determine if the view is currently selected. 
@@ -21,24 +28,102 @@ This is a component that was pulled out of my app Resolute to be shared as an op
 - The states as of 1.0 are defined as follows.
     - Active: Font Size of 24 with a foreground color of .primary.
     - Inactive: Font Size of 12 with a foreground color of .secondary.
+- When the Menu style TabTitleBar is presented, you can change the following.
+    - changeTabLabel: 
+        - This is used on the Menu button to guide the user to tap here to change the tab. 
+        - This is a String value with a default value of "Change Tab". 
+    - changeTabSymbol:
+        - This is the icon used on the Menu button, this is an SF Symbol.
+        - This is a String value with a default value of "arrow.left.arrow.right.square"
 
-# Usage Example
+
+# Simple Usage Example
 ```
 struct ExampleView: View {
     @State var tabSelection: Int = 0
     
-    var tabItems: [TabItem] {
-        let item1 = TabItem(view: Text("Item 1"), index: 0)
-        let item2 = TabItem(view: Text("Item 2"), index: 1)
-        let item3 = TabItem(view: Text("Item 3"), index: 2)
-        
-        return [item1, item2, item3]
-    }
+    var tabItems: [TabItem] = Array(0...2).map({TabItem(view: Text("Item \($0)"), index: $0)})
     
     var body: some View {
         TabTitleBar(
             currentTabSelection: $tabSelection,
             tabItems: tabItems
+        )
+    }
+}
+```
+
+# Large Usage Example
+```
+struct ExampleView: View {
+    @State var tabSelection: Int = 0
+    
+    var tabItems: [TabItem] = [
+        TabItem(
+            view: Text("Shoes"),
+            index: 0
+        ),
+        TabItem(
+            view: Text("Workouts"),
+            index: 1
+        ),
+        TabItem(
+            view: Text("Recents"),
+            index: 2
+        ),
+        TabItem(
+            view: Text("Equipment"),
+            index: 3
+        ),
+        TabItem(
+            view: Text("Routing"),
+            index: 4
+        ),
+        TabItem(
+            view: Text("Replacements"),
+            index: 5
+        ),
+        TabItem(
+            view: Text("Settings"),
+            index: 6
+        )
+    ]
+    
+    var body: some View {
+        TabTitleBar(
+            currentTabSelection: $tabSelection,
+            tabItems: tabItems
+        )
+    }
+}
+```
+
+# Complex Usage Example
+```
+struct ExampleView: View {
+    @State var tabSelection: Int = 0
+    
+    var tabItems: [TabItem] = [
+        TabItem(
+            view: Text("Long Text Here"),
+            index: 0
+        ),
+        TabItem(
+            view: Text("More Long Text Here"),
+            index: 1
+        ),
+        TabItem(
+            view: Text("This is supposed to break to a new line"),
+            index: 2
+        )
+    ]
+    
+    var body: some View {
+        TabTitleBar(
+            currentTabSelection: $tabSelection,
+            tabItems: tabItems,
+            changeTabLabel: "Switch Tab",
+            changeTabSymbol: "arrow.triangle.branch"
         )
     }
 }

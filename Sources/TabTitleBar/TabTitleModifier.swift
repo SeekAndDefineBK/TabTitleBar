@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TabTitleModifier: ViewModifier {
     @Binding var currentTabSelection: Int
-    let targetIndex: Int
+    let index: Int
    
     // Font size is used to reduce variables being changed... there is an issue where the baseline is shifting.
     // TODO: Once this issue is resolved, re-evaluate if you can use Apple's font size options
@@ -23,10 +23,10 @@ struct TabTitleModifier: ViewModifier {
     /// A view modifier that will stylize the tab item as either active or inactive
     /// - Parameters:
     ///   - currentTabSelection: a Binding<Int> that is the currently selected Tab
-    ///   - targetIndex: an Int to compare to currentTabSelection to determine if this item is active or inactive
-    init(currentTabSelection: Binding<Int>, targetIndex: Int) {
+    ///   - index: an Int to compare to currentTabSelection to determine if this item is active or inactive
+    init(currentTabSelection: Binding<Int>, index: Int) {
         _currentTabSelection = currentTabSelection
-        self.targetIndex = targetIndex
+        self.index = index
        
         _fontSize = State(wrappedValue: isActive() ? activeFontsize : inactiveFontsize)
         _foreground = State(wrappedValue: isActive() ? .primary : .secondary)
@@ -44,7 +44,7 @@ struct TabTitleModifier: ViewModifier {
    
     // Convenience to determine if this tab is active or inactive
     func isActive() -> Bool {
-        currentTabSelection == targetIndex
+        currentTabSelection == index
     }
    
     // Call this method to switch properties between active and inactive
@@ -57,3 +57,5 @@ struct TabTitleModifier: ViewModifier {
         }
     }
 }
+
+
