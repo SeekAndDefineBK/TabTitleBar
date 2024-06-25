@@ -39,7 +39,11 @@ public struct TabTitleBar: View {
                 // For use in a Menu view (or another view else like it)
                 if withSelectionIndicator {
                     Label {
-                        ItemWithModifer(item: item)
+                        ItemBuilder(item: item)
+                            .modifier(TabTitleModifier(
+                                currentTabSelection: $currentTabSelection,
+                                index: item.index)
+                            )
                     } icon: {
                         let isSelected = item.index == currentTabSelection
                         Image(systemName: isSelected ? "checkmark" : "")
@@ -48,7 +52,11 @@ public struct TabTitleBar: View {
                     }
                 } else {
                     // Default view for smaller views
-                    ItemWithModifer(item: item)
+                    ItemBuilder(item: item)
+                        .modifier(TabTitleModifier(
+                            currentTabSelection: $currentTabSelection,
+                            index: item.index)
+                        )
                 }
             }
             // Set the color to primary so that the default blue button isn't used
@@ -57,12 +65,18 @@ public struct TabTitleBar: View {
     }
     
     @ViewBuilder
-    public func ItemWithModifer(item: TabItem) -> some View {
-        item.view
-            .modifier(TabTitleModifier(
-                currentTabSelection: $currentTabSelection,
-                index: item.index)
-            )
+    public func ItemBuilder(item: TabItem) -> some View {
+        Group {
+            if let symbol = item.symbol {
+                Label(
+                    title: { item.view },
+                    icon: { Image(systemName: symbol) }
+                )
+                
+            } else {
+                item.view
+            }
+        }
     }
             
     public var body: some View {
@@ -77,7 +91,7 @@ public struct TabTitleBar: View {
                 ButtonLoopView(withSelectionIndicator: true)
             } label: {
                 HStack {
-                    tabItems[currentTabSelection].view
+                    ItemBuilder(item: tabItems[currentTabSelection])
                         .modifier(SingleTabTitleModifier())
                         .foregroundStyle(.foreground)
                     
@@ -96,7 +110,13 @@ public struct TabTitleBar: View {
 struct SmallExampleView: View {
     @State var tabSelection: Int = 0
     
-    var tabItems: [TabItem] = Array(0...2).map({TabItem(view: Text("Item \($0)"), index: $0)})
+    var tabItems: [TabItem] = Array(0...2).map({
+        TabItem(
+            view: Text("Item \($0)"),
+            index: $0,
+            symbol: "\($0).circle"
+        )
+    })
     
     var body: some View {
         VStack {
@@ -156,7 +176,8 @@ struct VeryLargeExampleView: View {
     var tabItems: [TabItem] = [
         TabItem(
             view: Text("Long Text Here"),
-            index: 0
+            index: 0,
+            symbol: "circle.dashed"
         ),
         TabItem(
             view: Text("More Long Text Here"),
@@ -164,7 +185,8 @@ struct VeryLargeExampleView: View {
         ),
         TabItem(
             view: Text("This is supposed to break to a new line"),
-            index: 2
+            index: 2,
+            symbol: "circle.hexagongrid"
         )
     ]
     
