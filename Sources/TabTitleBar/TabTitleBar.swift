@@ -181,8 +181,7 @@ struct VeryLargeExampleView: View {
         ),
         TabItem(
             view: Text("More Long Text Here"),
-            index: 1,
-            symbol: "circle.hexagonpath"
+            index: 1
         ),
         TabItem(
             view: Text("This is supposed to break to a new line"),
