@@ -11,14 +11,7 @@ struct TabTitleModifier: ViewModifier {
     @Binding var currentTabSelection: Int
     let index: Int
    
-    // Font size is used to reduce variables being changed... there is an issue where the baseline is shifting.
-    // TODO: Once this issue is resolved, re-evaluate if you can use Apple's font size options
-    @State private var fontSize: CGFloat = 12
     @State private var foreground: Color = .secondary
-   
-    // MARK: Font Size Options
-    let inactiveFontsize: CGFloat = 12
-    let activeFontsize: CGFloat = 24
     
     /// A view modifier that will stylize the tab item as either active or inactive
     /// - Parameters:
@@ -28,21 +21,23 @@ struct TabTitleModifier: ViewModifier {
         _currentTabSelection = currentTabSelection
         self.index = index
        
-        _fontSize = State(wrappedValue: isActive() ? activeFontsize : inactiveFontsize)
         _foreground = State(wrappedValue: isActive() ? .primary : .secondary)
     }
    
     func body(content: Content) -> some View {
         content
-            .font(.system(size: fontSize))
+            .scaleEffect(isActive() ? 1 : 0.7)
             .fontWeight(.bold)
             .foregroundStyle(foreground)
-            .onChange(of: currentTabSelection) { _ in // TODO: Change to iOS 17+ modifier when ...16 modifier is deprecated
+            
+        // TODO: Change to iOS 17+ modifier when ...16 modifier is deprecated
+            .onChange(of: currentTabSelection) { _ in
                 update()
             }
     }
    
     // Convenience to determine if this tab is active or inactive
+    // used in multiple places in this view
     func isActive() -> Bool {
         currentTabSelection == index
     }
@@ -52,7 +47,6 @@ struct TabTitleModifier: ViewModifier {
         let active = isActive()
        
         withAnimation {
-            fontSize = active ? activeFontsize : inactiveFontsize
             foreground = active ? .primary : .secondary
         }
     }
