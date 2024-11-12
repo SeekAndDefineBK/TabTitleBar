@@ -72,7 +72,6 @@ public struct TabTitleBar: View {
                     title: { item.view },
                     icon: { Image(systemName: symbol) }
                 )
-                
             } else {
                 item.view
             }
