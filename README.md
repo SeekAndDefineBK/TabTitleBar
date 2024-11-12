@@ -12,9 +12,14 @@ This is a component that was pulled out of my app Resolute to be shared as an op
 - If the developer has more tabs than can fit in a horizontally constrained space, the view will collapse into a menu button which will display the currently selected title and on tap will open a menu picker to change the tab.
 
 # New in Version 1.2
-- The developer can now add an SF Symbol next to the text view. The title will then be a SwiftUI Label object. Symbol is an optional value on TabItem.  
+- The developer can now add an SF Symbol next to the text view. The title will then be a SwiftUI Label object. Symbol is an optional value on TabItem. 
 
-# New Issues
+# New in Version 1.2.1
+- Applying a scaleEffect in TabTitleModifier instead of changing font sizing. This accomplishes a the following.
+    - The animation on the label view is much more smooth now.
+    - Better conformance to Apple's dynamic type sizing. The font size is now determined by you!
+
+# Current Issues
 - I created an ItemWithModifier view with the intention to use it in the Menu style picker. But it appears the target index value never matches the currently selected tab. This is likely an easy fix, but at this time I'm going around in circles trying to fix it. When this is fixed, SingleTabTitleModifier can be deprecated.  
 
 # Demo
@@ -29,8 +34,8 @@ This is a component that was pulled out of my app Resolute to be shared as an op
     - An index, this is used to determine if the view is currently selected. 
     - A Text view, this is the view that will animate between the active and inactive state. 
 - The states as of 1.0 are defined as follows.
-    - Active: Font Size of 24 with a foreground color of .primary.
-    - Inactive: Font Size of 12 with a foreground color of .secondary.
+    - Active: Default Font Size with a foreground color of .primary.
+    - Inactive: Font size at 70% Active font size, and with a foreground color of .secondary.
 - When the Menu style TabTitleBar is presented, you can change the following.
     - changeTabLabel: 
         - This is used on the Menu button to guide the user to tap here to change the tab. 
